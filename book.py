@@ -23,7 +23,7 @@ class Book:
         sua4=input("Ban muon sua so luong sach co san? (Yes/No)   ")
         if sua4=="Yes" or sua4=="yes":
             self.quantity=int(input("So luong sach dang co san: "))
-
+""" #doan nay dua vao module khac
     def borrow(self, soluong=1):
         if self.quantity-soluong<=0:
             print("Khong du sach nay de muon!")
@@ -33,3 +33,4 @@ class Book:
     def back(self, soluong):
         self.quantity=self.quantity+soluong
         print(f"\nSo sach {self.title} co san sau khi tra {soluong} cuon la: {self.quantity}")
+"""
