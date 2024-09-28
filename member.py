@@ -5,7 +5,7 @@ class Member:
         self.phone_number = phone
 
     def display(self):
-        print(f"MSSV: {self.mssv}, Name: {self.name}, Phone number: {self.phone}")
+        print(f"MSSV: {self.mssv}\nName: {self.name}\nPhone number: {self.phone}")
 
     def update_info(self,mssv, name, phone):
         print("\nBan dang muon sua thong tin nguoi sau:")
