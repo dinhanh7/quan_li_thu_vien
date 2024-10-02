@@ -8,7 +8,7 @@ from member import Member
 # Khởi tạo đối tượng Library
 library = Library()
 
-# Đọc dữ liệu từ file
+# Đọc dữ liệu từ file sách và thành viên
 def load_books():
     try:
         with open("book.txt", "r") as file:
@@ -29,7 +29,19 @@ def load_members():
     except FileNotFoundError:
         pass
 
-# Ghi dữ liệu vào file
+# Đọc dữ liệu mượn từ file library.txt
+def load_borrowed_books():
+    try:
+        with open("library.txt", "r") as file:
+            for line in file:
+                member_id, book_id, quantity = line.strip().split(",")
+                if member_id not in library.borrowed_books:
+                    library.borrowed_books[member_id] = {}
+                library.borrowed_books[member_id][int(book_id)] = int(quantity)
+    except FileNotFoundError:
+        pass
+
+# Ghi dữ liệu sách và thành viên vào file
 def save_books():
     with open("book.txt", "w") as file:
         for book in library.books.values():
@@ -39,6 +51,13 @@ def save_members():
     with open("member.txt", "w") as file:
         for member in library.members.values():
             file.write(f"{member.member_id},{member.name},{member.phone_number}\n")
+
+# Ghi dữ liệu mượn vào file library.txt
+def save_borrowed_books():
+    with open("library.txt", "w") as file:
+        for member_id, books in library.borrowed_books.items():
+            for book_id, quantity in books.items():
+                file.write(f"{member_id},{book_id},{quantity}\n")
 
 # Hàm thêm sách
 def add_book_gui():
@@ -258,15 +277,25 @@ def borrow_book_gui():
     entry_book_id = tk.Entry(window)
     entry_book_id.grid(row=1, column=1)
 
+    lbl_quantity = tk.Label(window, text="Số lượng mượn:")
+    lbl_quantity.grid(row=2, column=0)
+    entry_quantity = tk.Entry(window)
+    entry_quantity.grid(row=2, column=1)
+
     def borrow_book():
         mssv = entry_mssv.get()
-        book_id = int(entry_book_id.get())
-        library.borrow_book(mssv, book_id)
-        save_books()  # Cập nhật số lượng sách
-        window.destroy()
+        try:
+            book_id = int(entry_book_id.get())
+            quantity = int(entry_quantity.get())
+            library.borrow_book(mssv, book_id, quantity)
+            save_books()  # Cập nhật số lượng sách
+            save_borrowed_books()  # Lưu dữ liệu mượn vào file
+            window.destroy()
+        except ValueError:
+            messagebox.showerror("Lỗi", "Vui lòng nhập ID và số lượng hợp lệ.")
 
     btn_borrow = tk.Button(window, text="Mượn", command=borrow_book)
-    btn_borrow.grid(row=2, column=0, columnspan=2)
+    btn_borrow.grid(row=3, column=0, columnspan=2)
 
 # Hàm trả sách
 def return_book_gui():
@@ -283,15 +312,25 @@ def return_book_gui():
     entry_book_id = tk.Entry(window)
     entry_book_id.grid(row=1, column=1)
 
+    lbl_quantity = tk.Label(window, text="Số lượng trả:")
+    lbl_quantity.grid(row=2, column=0)
+    entry_quantity = tk.Entry(window)
+    entry_quantity.grid(row=2, column=1)
+
     def return_book():
         mssv = entry_mssv.get()
-        book_id = int(entry_book_id.get())
-        library.return_book(mssv, book_id)
-        save_books()  # Cập nhật số lượng sách
-        window.destroy()
+        try:
+            book_id = int(entry_book_id.get())
+            quantity = int(entry_quantity.get())
+            library.return_book(mssv, book_id, quantity)
+            save_books()  # Cập nhật số lượng sách
+            save_borrowed_books()  # Lưu dữ liệu mượn vào file
+            window.destroy()
+        except ValueError:
+            messagebox.showerror("Lỗi", "Vui lòng nhập ID và số lượng hợp lệ.")
 
     btn_return = tk.Button(window, text="Trả", command=return_book)
-    btn_return.grid(row=2, column=0, columnspan=2)
+    btn_return.grid(row=3, column=0, columnspan=2)
 
 # Hiển thị sách thành viên đang mượn
 def display_member_borrowing_gui():
@@ -311,7 +350,7 @@ def display_member_borrowing_gui():
             for book_id in library.borrowed_books[mssv]:
                 if book_id in library.books:
                     book = library.books[book_id]
-                    text_box.insert(tk.END, f"ID: {book.book_id}, Tên: {book.title}\n")
+                    text_box.insert(tk.END, f"ID: {book.book_id}, Tên: {book.title}, Số lượng: {library.borrowed_books[mssv][book_id]}\n")
         else:
             messagebox.showinfo("Thông báo", "Thành viên không mượn sách nào.")
 
@@ -370,6 +409,7 @@ btn_display_borrowing.pack(padx=5, pady=5)
 # Khởi động chương trình và tải dữ liệu từ file
 load_books()
 load_members()
+load_borrowed_books()
 
 # Bắt đầu vòng lặp chính
 root.mainloop()
