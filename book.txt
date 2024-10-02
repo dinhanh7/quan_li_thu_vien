@@ -1,0 +1,20 @@
+001,Harry Potter,J.K. Rowling,4
+002,Lord of the Rings,J.R.R. Tolkien,3
+003,The Great Gatsby,F. Scott Fitzgerald,4
+004,1984,George Orwell,6
+005,To Kill a Mockingbird,Harper Lee,7
+006,Moby Dick,Herman Melville,1
+007,The Catcher in the Rye,J.D. Salinger,5
+008,Pride and Prejudice,Jane Austen,8
+009,The Hobbit,J.R.R. Tolkien,4
+010,Fahrenheit 451,Ray Bradbury,6
+011,War and Peace,Leo Tolstoy,2
+012,The Odyssey,Homer,3
+013,Crime and Punishment,Fyodor Dostoevsky,4
+014,The Brothers Karamazov,Fyodor Dostoevsky,5
+015,The Adventures of Sherlock Holmes,Arthur Conan Doyle,6
+016,The Alchemist,Paulo Coelho,7
+017,Brave New World,Aldous Huxley,4
+018,Wuthering Heights,Emily Bronte,5
+019,Anna Karenina,Leo Tolstoy,3
+020,Jane Eyre,Charlotte Bronte,6
