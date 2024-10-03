@@ -90,21 +90,12 @@ class Library:
             messagebox.showwarning("Warning", "Thành viên không mượn đủ số lượng sách để trả!")
             return
 
-        # Update returned quantity
+        # Cập nhật số lượng sách được trả
         self.borrowed_books[member_id][book_id] -= quantity
         if self.borrowed_books[member_id][book_id] == 0:
             del self.borrowed_books[member_id][book_id]
 
-        self.books[book_id].quantity += quantity  # Increase available quantity
-        messagebox.showinfo("Thông báo", "Thành viên đã trả sách thành công!")
-    def return_book(self, member_id, book_id):
-        """Thành viên trả sách."""
-        if member_id not in self.borrowed_books or book_id not in self.borrowed_books[member_id]:
-            messagebox.showwarning("Warning", "Thành viên không mượn sách này!")
-            return
-
-        self.borrowed_books[member_id].remove(book_id)
-        self.books[book_id].quantity += 1
+        self.books[book_id].quantity += quantity  # Tăng số lượng sách có sẵn
         messagebox.showinfo("Thông báo", "Thành viên đã trả sách thành công!")
 
     def display_books(self):

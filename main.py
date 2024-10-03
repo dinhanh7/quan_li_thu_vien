@@ -286,7 +286,6 @@ def borrow_book_gui():
             book_id = int(entry_book_id.get())
             quantity = int(entry_quantity.get())
 
-            # Call the updated borrow function
             library.borrow_book(mssv, book_id, quantity)
             save_books()  # Cập nhật số lượng sách
             save_borrowed_books()  # Lưu thông tin mượn vào file
@@ -323,17 +322,17 @@ def return_book_gui():
             book_id = int(entry_book_id.get())
             quantity = int(entry_quantity.get())
 
-            # Call the updated return function
+            # Gọi hàm đã sửa đổi trong lớp Library
             library.return_book(mssv, book_id, quantity)
             save_books()  # Cập nhật số lượng sách
-            save_borrowed_books()  # Lưu thông tin trả vào file
+            save_borrowed_books()  # Lưu thông tin trả sách vào file
             window.destroy()
         except ValueError:
             messagebox.showerror("Lỗi", "Vui lòng nhập ID và số lượng hợp lệ.")
 
     btn_return = tk.Button(window, text="Trả", command=return_book)
     btn_return.grid(row=3, column=0, columnspan=2)
-    
+
 # Hiển thị sách thành viên đang mượn
 def display_member_borrowing_gui():
     window = tk.Toplevel()
