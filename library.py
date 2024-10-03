@@ -67,16 +67,14 @@ class Library:
             messagebox.showwarning("Warning", "Không đủ số lượng sách để mượn!")
             return
 
-        # Track borrowed books by member and book_id
         if member_id not in self.borrowed_books:
             self.borrowed_books[member_id] = {}
         
         if book_id not in self.borrowed_books[member_id]:
             self.borrowed_books[member_id][book_id] = 0
         
-        # Update borrowing quantity
         self.borrowed_books[member_id][book_id] += quantity
-        self.books[book_id].quantity -= quantity  # Decrease available quantity
+        self.books[book_id].quantity -= quantity
         
         messagebox.showinfo("Thông báo", "Thành viên đã mượn sách thành công!")
 
