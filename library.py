@@ -53,8 +53,8 @@ class Library:
         else:
             messagebox.showwarning("Warning", "Không tìm thấy thành viên với MSSV này!")
 
-    def borrow_book(self, member_id, book_id):
-        """Thành viên mượn sách."""
+    def borrow_book(self, member_id, book_id, quantity=1):
+        """Thành viên mượn sách với số lượng."""
         if member_id not in self.members:
             messagebox.showwarning("Warning", "Thành viên không tồn tại!")
             return
@@ -63,17 +63,42 @@ class Library:
             messagebox.showwarning("Warning", "Sách không tồn tại!")
             return
 
-        if self.books[book_id].quantity <= 0:
-            messagebox.showwarning("Warning", "Sách hiện không có sẵn để mượn!")
+        if self.books[book_id].quantity < quantity:
+            messagebox.showwarning("Warning", "Không đủ số lượng sách để mượn!")
             return
 
+        # Track borrowed books by member and book_id
         if member_id not in self.borrowed_books:
-            self.borrowed_books[member_id] = []
-
-        self.borrowed_books[member_id].append(book_id)
-        self.books[book_id].quantity -= 1
+            self.borrowed_books[member_id] = {}
+        
+        if book_id not in self.borrowed_books[member_id]:
+            self.borrowed_books[member_id][book_id] = 0
+        
+        # Update borrowing quantity
+        self.borrowed_books[member_id][book_id] += quantity
+        self.books[book_id].quantity -= quantity  # Decrease available quantity
+        
         messagebox.showinfo("Thông báo", "Thành viên đã mượn sách thành công!")
 
+    def return_book(self, member_id, book_id, quantity=1):
+        """Thành viên trả sách với số lượng."""
+        if member_id not in self.borrowed_books or book_id not in self.borrowed_books[member_id]:
+            messagebox.showwarning("Warning", "Thành viên không mượn sách này!")
+            return
+
+        borrowed_quantity = self.borrowed_books[member_id][book_id]
+
+        if borrowed_quantity < quantity:
+            messagebox.showwarning("Warning", "Thành viên không mượn đủ số lượng sách để trả!")
+            return
+
+        # Update returned quantity
+        self.borrowed_books[member_id][book_id] -= quantity
+        if self.borrowed_books[member_id][book_id] == 0:
+            del self.borrowed_books[member_id][book_id]
+
+        self.books[book_id].quantity += quantity  # Increase available quantity
+        messagebox.showinfo("Thông báo", "Thành viên đã trả sách thành công!")
     def return_book(self, member_id, book_id):
         """Thành viên trả sách."""
         if member_id not in self.borrowed_books or book_id not in self.borrowed_books[member_id]:
